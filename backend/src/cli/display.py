@@ -90,8 +90,8 @@ def show_approval_needed(tool_name: str, reason: str, rules: list) -> bool:
     console.print(
         Panel(
             f"[bold {COLOR_APPROVAL}]{ICON_APPROVAL} Approval Required[/bold {COLOR_APPROVAL}]\n\n"
-            f"Tool: [bold]{tool_name}[/bold]\n"
-            f"Reason: {reason}",
+            f"Tool: [bold]{rich_escape(tool_name)}[/bold]\n"
+            f"Reason: {rich_escape(reason)}",
             border_style=COLOR_APPROVAL,
             padding=(1, 2),
         )
@@ -103,7 +103,7 @@ def show_approval_needed(tool_name: str, reason: str, rules: list) -> bool:
         table.add_column()
         for r in rules:
             sev_color = "red" if r.get("severity") == "critical" else "yellow"
-            table.add_row(f"[{sev_color}]{r.get('severity', '')}[/{sev_color}]", r.get("description", ""))
+            table.add_row(f"[{sev_color}]{rich_escape(r.get('severity', ''))}[/{sev_color}]", rich_escape(r.get("description", "")))
         console.print(table)
 
     console.print()
@@ -146,7 +146,7 @@ def show_todo_progress(data: dict) -> None:
             s = t.get("status", "pending")
             icon = icons.get(s, "  ")
             color = colors.get(s, "")
-            console.print(f"  {icon} [{color}][{s}][/{color}] {t.get('subject', '')}")
+            console.print(f"  {icon} [{color}][{rich_escape(s)}][/{color}] {rich_escape(t.get('subject', ''))}")
 
 
 def show_error(text: str) -> None:

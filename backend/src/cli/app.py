@@ -32,7 +32,6 @@ from src.cli.display import (
     show_tool_call,
     show_tool_denied,
     show_tool_result,
-    show_user_message,
     show_welcome,
 )
 
@@ -204,8 +203,11 @@ class CLIApp:
         """主 REPL 循环。"""
         while self._running:
             try:
+                # 圆角输入框：上半边框 + 输入行
+                console.print()
+                console.print("[bold cyan]╭─ You[/bold cyan]")
                 user_input = await asyncio.to_thread(
-                    input, "\n▸ "
+                    console.input, "[bold cyan]╰─[/bold cyan][bold white]▸[/bold white] "
                 )
             except (EOFError, KeyboardInterrupt):
                 console.print("\n[dim]Goodbye.[/dim]")
@@ -250,8 +252,6 @@ class CLIApp:
 
     async def _handle_chat(self, message: str) -> None:
         """处理一次聊天交互（支持流式和审批）。"""
-        show_user_message(message)
-
         try:
             # 使用流式 API 获得实时工具调用展示
             await self._handle_streaming_chat(message)
@@ -362,14 +362,6 @@ class CLIApp:
             show_todo_progress(data)
         except Exception as e:
             show_error(str(e))
-
-
-# ---------------------------------------------------------------------------
-# helpers
-# ---------------------------------------------------------------------------
-
-def _style(s: str) -> str:
-    return s
 
 
 # ---------------------------------------------------------------------------
